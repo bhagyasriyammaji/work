@@ -1,0 +1,117 @@
+drop database banking_db;
+
+create database banking_db;
+
+use banking_db;
+
+create table user(
+
+mobile_number bigint,
+
+user_id varchar(20) UNIQUE,
+
+account_holder_name varchar(20) NOT NULL,
+
+gender varchar(10) NOT NULL,
+
+date_of_birth date NOT NULL,
+
+password varchar(20) NOT NULL,
+
+email varchar(20) NOT NULL,
+
+communication_address varchar(50) NOT NULL,
+
+pan varchar(10) NOT NULL,
+
+constraint ps_mobile_number_pk primary key (mobile_number)
+
+);
+
+insert into user values('9876543210','U1','James','Male','2001-05-29','james@12','James@infy.com','Mysore-Street 1','OL097Y7654');
+
+insert into user values('9876987431','U2','Sherlock Holmes','Male','1999-07-30','Sherlock@12','Sherlockholmes@infy.com','221B Baker street','BBUPC0954N');
+
+create table bank_account(
+
+account_number bigint AUTO_INCREMENT,
+
+bank_name varchar(20) NOT NULL,
+
+balance double NOT NULL,
+
+account_type varchar(20) NOT NULL,
+
+ifsc_code varchar(20) NOT NULL,
+
+opening_date date NOT NULL,
+
+mobile_number bigint ,
+
+constraint account_number_pk primary key (account_number),
+
+CONSTRAINT fk_user_mobile_number FOREIGN KEY (mobile_number) REFERENCES user(mobile_number)
+
+);
+
+insert into bank_account values(55810643789,'ICICI',12000,'Savings','ICIC1234321','2022-07-28',9876987431);
+
+insert into bank_account values(55810643710,'ICICI',500000,'Salary','ICIC1234321','2022-08-30',9876987431);
+
+insert into bank_account values(91510123876,'AXIS',200000,'Current','AXIS1234321','2021-05-15',9876987431);
+
+insert into bank_account values(11213409673,'SBI',2500,'Savings','SBIN1234321','2020-08-12',9876987431);
+
+insert into bank_account values(55810643722,'ICICI',5600000,'Savings','ICIC1234321','2019-06-17',9876543210);
+
+insert into bank_account values(66810643799,'ICICI',23000,'Salary','ICICI1234321','2018-03-14',9876543210);
+
+create table digital_bank_account(
+
+digital_banking_id varchar(20),
+
+account_type varchar(20) NOT NULL ,
+
+constraint digital_banking_id_pk primary key(digital_banking_id),
+
+mobile_number bigint NOT NULL references user(mobile_number),
+
+account_number bigint NOT NULL references bank_account(account_number)
+
+);
+
+insert into digital_bank_account values('w_1002','Salary',9876987431,55810643710);
+
+insert into digital_bank_account values('w_1001','Savings',9876987431,55810643789);
+
+insert into digital_bank_account values('w_1003','Salary',7022713755,66810643799);
+
+create table transaction(
+
+transaction_id int ,
+
+mode_of_transaction varchar(20) NOT NULL,
+
+paid_to bigint NOT NULL,
+
+receiver_account_number bigint NOT NULL,
+
+amount double NOT NULL,
+
+transaction_date_time TIMESTAMP NOT NULL,
+
+remarks varchar(30) NOT NULL,
+
+paid_from bigint NOT NULL,
+
+sender_account_number bigint NOT NULL,
+
+constraint transaction_id_pk primary key(transaction_id)
+
+);
+
+insert into transaction values(123456789,'fund transfer',7022713755,558106433722,12890,'2022-07-30 6:35:11','Payment to groceries',9876987431,55810643789);
+
+insert into transaction values(123456790,'fund transfer',7022713755,558106433722,1200,'2022-07-30 6:45:11','Payment to Bill',9876987431,55810643710);
+
+insert into transaction values(123456777,'fund Transfer',9876987431,91510123876,1000,'2022-07-30 17:05:23','Payment for Restraurant Bill',7022713755,66810643799);
